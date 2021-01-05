@@ -272,5 +272,6 @@ module adrv9001_rx #(
 
   assign adc_clk = adc_clk_in_fast;
   assign adc_valid = ~adc_rst;
+  assign adc_clk_ratio = 4;
 
 endmodule
