@@ -1,0 +1,40 @@
+# ip
+
+source ../scripts/adi_env.tcl
+source $ad_hdl_dir/library/scripts/adi_ip_xilinx.tcl
+
+adi_ip_create axi_ad7771
+
+adi_ip_files axi_ad7771 [list \
+  "$ad_hdl_dir/library/common/ad_rst.v" \
+  "$ad_hdl_dir/library/common/up_adc_channel.v" \
+  "$ad_hdl_dir/library/common/up_adc_common.v" \
+  "$ad_hdl_dir/library/common/up_axi.v" \
+  "$ad_hdl_dir/library/common/up_clock_mon.v" \
+  "$ad_hdl_dir/library/common/up_xfer_cntrl.v" \
+  "$ad_hdl_dir/library/common/up_xfer_status.v" \
+  "$ad_hdl_dir/library/axi_generic_adc/axi_generic_adc.v" \
+  "axi_ad7771_if.v" \
+  "axi_ad7771.v" ]
+
+adi_ip_properties axi_ad7771
+
+adi_init_bd_tcl
+adi_ip_bd axi_ad7771 "bd/bd.tcl"
+
+set_property company_url {https://wiki.analog.com/resources/fpga/docs/ad7771} [ipx::current_core]
+
+
+
+set_property driver_value 0 [ipx::get_ports *dovf* -of_objects [ipx::current_core]]
+
+
+
+ipx::infer_bus_interface clk_in xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+ipx::infer_bus_interface adc_clk xilinx.com:signal:clock_rtl:1.0 [ipx::current_core]
+
+
+adi_add_auto_fpga_spec_params
+ipx::create_xgui_files [ipx::current_core]
+
+ipx::save_core [ipx::current_core]
