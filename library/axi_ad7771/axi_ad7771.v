@@ -92,18 +92,9 @@ module axi_ad7768 #(
 
   wire          adc_clk_s;
   wire          valid_pp_s;
-  wire  [35:0]  up_status_clr_s;
-  wire  [35:0]  up_status_s;
-  
-  
-  
-  
-  
+
   
   assign adc_clk = adc_clk_s;
-  assign up_status_clr_s [32:0] = up_status_clr;
-  assign up_status_clr_s [35:33] = 'h0;
-  assign up_status = up_status_s [32:0];
 
 axi_generic_adc #(
   .NUM_OF_CHANNELS(8),
@@ -135,7 +126,7 @@ i_axi_generic_adc (
   .adc_enable({adc_enable_0,adc_enable_1,adc_enable_2,adc_enable_3,adc_enable_4,adc_enable_5,adc_enable_6,adc_enable_7}),
   .adc_dovf(adc_dovf));
 
-ad7768_if i_ad7768_if (
+axi_ad7771_if i_ad7771_if (
   .clk_in (clk_in),
   .ready_in (ready_in),
   .data_in (data_in),

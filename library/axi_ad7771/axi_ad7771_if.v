@@ -35,7 +35,7 @@
 
 `timescale 1ns/100ps
 
-module ad7768_if (
+module axi_ad7771_if (
 
   // device-interface
 

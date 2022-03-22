@@ -83,9 +83,9 @@ module system_top (
 
   input                   otg_vbusoc,
 
-  input                   clk_in,
-  input                   ready_in,
-  input       [ 3:0]      data_in,
+  input                   adc_clk_in,
+  input                   adc_ready_in,
+  input       [ 3:0]      adc_data_in,
 
   output                  spi_csn,
   output                  spi_clk,
@@ -123,8 +123,9 @@ module system_top (
     .dio_p (iic_mux_sda));
 
   system_wrapper i_system_wrapper (
-    .adc_clk (adc_clk),
-    .adc_data (data_in),
+    .adc_clk_in(adc_clk_in),
+    .adc_ready_in(adc_ready_in),
+    .adc_data_in(adc_data_in),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),
     .ddr_cas_n (ddr_cas_n),
