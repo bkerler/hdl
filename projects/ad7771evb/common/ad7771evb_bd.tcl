@@ -42,7 +42,7 @@ ad_connect axi_ad7771_adc/adc_valid_pp ad7771_adc_pack/fifo_wr_en
 
 ad_connect adc_data_in axi_ad7771_adc/data_in
 ad_connect adc_ready axi_ad7771_adc/ready_in
-
+ad_connect adc_sync  axi_ad7771_adc/sync_in
 for {set i 0} {$i < 8} {incr i} {
   ad_connect axi_ad7771_adc/adc_data_$i ad7771_adc_pack/fifo_wr_data_$i
   ad_connect axi_ad7771_adc/adc_enable_$i ad7771_adc_pack/enable_$i
@@ -78,3 +78,31 @@ ad_cpu_interconnect 0x7C420000 axi_ad7771_adc
 ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
 ad_mem_hp1_interconnect sys_cpu_clk ad7771_dma/m_dest_axi
 
+
+
+#ILA
+
+set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 my_ila]
+    set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $my_ila
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $my_ila
+    set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE1_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE2_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE3_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE4_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE5_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE6_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE7_WIDTH {32}] $my_ila
+   
+   
+    ad_connect my_ila/clk axi_ad7771_adc/adc_clk
+    ad_connect my_ila/probe0 axi_ad7771_adc/adc_data_0
+    ad_connect my_ila/probe1 axi_ad7771_adc/adc_data_1
+    ad_connect my_ila/probe2 axi_ad7771_adc/adc_data_2
+    ad_connect my_ila/probe3 axi_ad7771_adc/adc_data_3
+    ad_connect my_ila/probe4 axi_ad7771_adc/adc_data_4
+    ad_connect my_ila/probe5 axi_ad7771_adc/adc_data_5
+    ad_connect my_ila/probe6 axi_ad7771_adc/adc_data_6
+    ad_connect my_ila/probe7 axi_ad7771_adc/adc_data_7
+    

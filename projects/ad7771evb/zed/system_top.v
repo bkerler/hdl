@@ -93,11 +93,19 @@ module system_top (
   input                   spi_miso,
 
 
-  inout                   reset_n,
-  inout                   start_n,
-  inout                   sync_n);
+  output                   reset_n,
+  output                   start_n,
+  output                   sync_n,
+  input                    alert,
+  output                   sdp_convst,
+  output                   gpio2,
+  output                   sdp_mclk);
 
   // internal signals
+  
+  wire    [63:0]  gpio_i;
+  wire    [63:0]  gpio_o;
+  wire    [63:0]  gpio_t;
 
   wire    [ 1:0]  iic_mux_scl_i_s;
   wire    [ 1:0]  iic_mux_scl_o_s;
@@ -108,6 +116,23 @@ module system_top (
 
 
   // instantiations
+assign gpio_i[32] = alert;
+assign start_n    = gpio_o[33];
+assign reset_n    = gpio_o[34];
+assign sync_n     = gpio_o[35];
+assign sdp_convst = gpio_o[36];
+assign gpio2      = gpio_o[37];
+assign sdp_mclk   = gpio_o[38];
+assign gpio_i[63:33] = gpio_o[63:33];
+assign gpio_i[31:15] = gpio_o[31:15];
+
+ad_iobuf #(.DATA_WIDTH(15)) iobuf_gpio_bd (
+  .dio_i (gpio_o[14:0]),
+  .dio_o (gpio_i[14:0]),
+  .dio_t (gpio_t[14:0]),
+  .dio_p (gpio_bd[14:0]));
+
+
 
 
   ad_iobuf #(.DATA_WIDTH(2)) i_iic_mux_scl (
@@ -124,7 +149,7 @@ module system_top (
 
   system_wrapper i_system_wrapper (
     .adc_clk_in(adc_clk_in),
-    .adc_ready_in(adc_ready_in),
+    .adc_ready(adc_ready),
     .adc_data_in(adc_data_in),
     .ddr_addr (ddr_addr),
     .ddr_ba (ddr_ba),

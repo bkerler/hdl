@@ -41,9 +41,11 @@ module axi_ad7771_if (
 
   input                   clk_in,
   input                   ready_in,
+  input                   sync_in,
   input       [ 3:0]      data_in,
 
   // data path interface
+
 
   output                  adc_clk,
   output  reg             adc_valid_0,
@@ -121,7 +123,7 @@ module axi_ad7771_if (
   reg               adc_ready_d1 = 'd0;
   reg               adc_ready = 'd0;
   reg               adc_ready_d = 'd0;
-  reg               adc_valid_d = 'd0;
+  
 
   // internal signals
 
@@ -134,9 +136,7 @@ module axi_ad7771_if (
 
   // data & status
 
-  always @(posedge adc_clk) begin
-    adc_valid_d <= adc_valid;
-  end
+ 
  
   always @(posedge adc_clk) begin
     
@@ -178,7 +178,7 @@ module axi_ad7771_if (
     adc_valid_pp <= adc_valid_0 | adc_valid_1 | adc_valid_2 | adc_valid_3 |
 	            adc_valid_4 | adc_valid_5 | adc_valid_6 | adc_valid_7;
    
-
+  end
   // data (interleaving)
 
 
@@ -256,7 +256,7 @@ module axi_ad7771_if (
   genvar n;
   generate
 
-  for (n = 0; n < 3; n = n + 1) begin: g_data
+  for (n = 0; n < 4; n = n + 1) begin: g_data
 
   always @(posedge adc_clk) begin
     if (adc_cnt_p[4:0] == 5'h00) begin

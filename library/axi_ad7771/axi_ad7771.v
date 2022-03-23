@@ -35,12 +35,13 @@
 
 `timescale 1ns / 1ps
 
-module axi_ad7768 #(
+module axi_ad7771 #(
   parameter   ID = 0)(
 
   input           adc_dovf,
   input           clk_in,
   input           ready_in,
+  input           sync_in,
   input   [ 3:0]  data_in,    
 
   output          adc_enable_0,
@@ -132,8 +133,7 @@ axi_ad7771_if i_ad7771_if (
   .data_in (data_in),
   .adc_clk (adc_clk_s),
   .adc_valid_pp (adc_valid_pp),
-  .adc_sync (adc_sync),
-  .adc_data (adc_data_p),
+  .sync_in (sync_in),
   .adc_data_0 (adc_data_0),
   .adc_data_1 (adc_data_1),
   .adc_data_2 (adc_data_2),
