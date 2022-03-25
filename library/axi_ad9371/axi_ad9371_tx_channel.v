@@ -102,7 +102,9 @@ module axi_ad9371_tx_channel #(
 
   end else begin
 
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor_1 (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor_1 (
     .clk (dac_clk),
     .valid (1'b1),
     .data_in (dac_data_iq_out[31:16]),
@@ -113,7 +115,9 @@ module axi_ad9371_tx_channel #(
     .iqcor_coeff_1 (dac_iqcor_coeff_1_s),
     .iqcor_coeff_2 (dac_iqcor_coeff_2_s));
 
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor_0 (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor_0 (
     .clk (dac_clk),
     .valid (1'b1),
     .data_in (dac_data_iq_out[15:0]),
@@ -153,8 +157,8 @@ module axi_ad9371_tx_channel #(
     .DDS_TYPE (DAC_DDS_TYPE),
     .CORDIC_DW (DAC_DDS_CORDIC_DW),
     .CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .CLK_RATIO (2))
-  i_dds (
+    .CLK_RATIO (2)
+  ) i_dds (
     .clk (dac_clk),
     .dac_dds_format (dac_dds_format),
     .dac_data_sync (dac_data_sync),
@@ -170,7 +174,9 @@ module axi_ad9371_tx_channel #(
 
   // single channel processor
 
-  up_dac_channel #(.CHANNEL_ID (CHANNEL_ID)) i_up_dac_channel (
+  up_dac_channel #(
+    .CHANNEL_ID (CHANNEL_ID)
+  ) i_up_dac_channel (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_dds_scale_1 (dac_dds_scale_1_s),

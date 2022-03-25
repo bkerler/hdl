@@ -122,7 +122,8 @@ module axi_adc_decimate_filter #(
     .filter_out(adc_fir_data_b),
     .ce_out(adc_fir_valid_b));
 
-  ad_iqcor #(.Q_OR_I_N (0),
+  ad_iqcor #(
+    .Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
     .SCALE_ONLY(1)
   ) i_scale_correction_a (
@@ -136,7 +137,8 @@ module axi_adc_decimate_filter #(
     .iqcor_coeff_1 (adc_correction_coefficient_a),
     .iqcor_coeff_2 (16'h0));
 
-  ad_iqcor #(.Q_OR_I_N (0),
+  ad_iqcor #(
+    .Q_OR_I_N (0),
     .DISABLE(CORRECTION_DISABLE),
     .SCALE_ONLY(1)
   ) i_scale_correction_b (

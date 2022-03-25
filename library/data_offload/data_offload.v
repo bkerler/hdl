@@ -294,8 +294,8 @@ module data_offload #(
     .S_DATA_WIDTH (SRC_DATA_WIDTH),
     .S_ADDRESS_WIDTH (SRC_ADDR_WIDTH_BYPASS),
     .M_DATA_WIDTH (DST_DATA_WIDTH),
-    .ASYNC_CLK (1))
-  i_bypass_fifo (
+    .ASYNC_CLK (1)
+  ) i_bypass_fifo (
     .m_axis_aclk (m_axis_aclk),
     .m_axis_aresetn (dst_rstn),
     .m_axis_ready (m_axis_ready),
@@ -311,8 +311,7 @@ module data_offload #(
     .s_axis_data  (s_axis_data),
     .s_axis_tlast (),
     .s_axis_full  (),
-    .s_axis_almost_full ()
-  );
+    .s_axis_almost_full ());
 
   // register map
 
@@ -321,8 +320,8 @@ module data_offload #(
     .MEM_TYPE (MEM_TYPE),
     .MEM_SIZE (MEM_SIZE),
     .TX_OR_RXN_PATH (TX_OR_RXN_PATH),
-    .AUTO_BRINGUP (AUTO_BRINGUP))
-  i_regmap (
+    .AUTO_BRINGUP (AUTO_BRINGUP)
+  ) i_regmap (
     .up_clk (up_clk),
     .up_rstn (up_rstn),
     .up_rreq (up_rreq_s),
@@ -347,8 +346,7 @@ module data_offload #(
     .src_fsm_status (src_fsm_status_s),
     .dst_fsm_status (dst_fsm_status_s),
     .sample_count_msb (sample_count_s[63:32]),
-    .sample_count_lsb (sample_count_s[31: 0])
-  );
+    .sample_count_lsb (sample_count_s[31: 0]));
 
   // axi interface wrapper
 
@@ -356,8 +354,8 @@ module data_offload #(
   assign up_rstn = s_axi_aresetn;
 
   up_axi #(
-    .AXI_ADDRESS_WIDTH (16))
-  i_up_axi (
+    .AXI_ADDRESS_WIDTH (16)
+  ) i_up_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

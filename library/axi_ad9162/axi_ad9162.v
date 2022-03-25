@@ -134,8 +134,8 @@ module axi_ad9162 #(
     .DAC_DDS_TYPE (DAC_DDS_TYPE),
     .DAC_DDS_CORDIC_DW (DAC_DDS_CORDIC_DW),
     .DAC_DDS_CORDIC_PHASE_DW (DAC_DDS_CORDIC_PHASE_DW),
-    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE))
-  i_core (
+    .DATAPATH_DISABLE (DAC_DATAPATH_DISABLE)
+  ) i_core (
     .dac_clk (dac_clk),
     .dac_rst (dac_rst),
     .dac_data (dac_data_s),

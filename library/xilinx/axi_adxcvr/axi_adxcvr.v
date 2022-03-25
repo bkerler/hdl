@@ -2170,8 +2170,8 @@ module axi_adxcvr #(
 
   axi_adxcvr_mdrp #(
     .XCVR_ID (15),
-    .NUM_OF_LANES (NUM_OF_LANES))
-  i_mdrp_ch_15 (
+    .NUM_OF_LANES (NUM_OF_LANES)
+  ) i_mdrp_ch_15 (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_sel (up_ch_sel),
@@ -2186,8 +2186,8 @@ module axi_adxcvr #(
 
   axi_adxcvr_es #(
     .XCVR_TYPE (XCVR_TYPE),
-    .TX_OR_RX_N (TX_OR_RX_N))
-  i_es (
+    .TX_OR_RX_N (TX_OR_RX_N)
+  ) i_es (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_es_enb (up_es_enb),
@@ -2247,8 +2247,8 @@ module axi_adxcvr #(
     .TX_POSTCURSOR (TX_POSTCURSOR),
     .TX_PRECURSOR (TX_PRECURSOR),
     .SYS_CLK_SEL (SYS_CLK_SEL),
-    .OUT_CLK_SEL (OUT_CLK_SEL))
-  i_up (
+    .OUT_CLK_SEL (OUT_CLK_SEL)
+  ) i_up (
     .up_cm_sel (up_cm_sel),
     .up_cm_enb (up_cm_enb),
     .up_cm_addr (up_cm_addr),
@@ -2308,7 +2308,9 @@ module axi_adxcvr #(
     .up_rdata (up_rdata),
     .up_rack (up_rack));
 
-  up_axi #(.AXI_ADDRESS_WIDTH (12)) i_axi (
+  up_axi #(
+    .AXI_ADDRESS_WIDTH (12)
+  ) i_axi (
     .up_rstn (up_rstn),
     .up_clk (up_clk),
     .up_axi_awvalid (s_axi_awvalid),

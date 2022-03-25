@@ -111,7 +111,9 @@ module axi_ad9371_rx_channel #(
   assign adc_dfmt_valid_s[n] = adc_valid_in;
   assign adc_dfmt_data_s[((16*n)+15):(16*n)] = adc_data_in[((16*n)+15):(16*n)];
   end else begin
-  ad_datafmt #(.DATA_WIDTH (16)) i_ad_datafmt (
+  ad_datafmt #(
+    .DATA_WIDTH (16)
+  ) i_ad_datafmt (
     .clk (adc_clk),
     .valid (adc_valid_in),
     .data (adc_data_in[((16*n)+15):(16*n)]),
@@ -152,7 +154,9 @@ module axi_ad9371_rx_channel #(
   assign adc_valid_out_s[n] = adc_dcfilter_valid_s[n];
   assign adc_data_out[((16*n)+15):(16*n)] = adc_dcfilter_data_s[((16*n)+15):(16*n)];
   end else begin
-  ad_iqcor #(.Q_OR_I_N (Q_OR_I_N)) i_ad_iqcor (
+  ad_iqcor #(
+    .Q_OR_I_N (Q_OR_I_N)
+  ) i_ad_iqcor (
     .clk (adc_clk),
     .valid (adc_dcfilter_valid_s[n]),
     .data_in (adc_dcfilter_data_s[((16*n)+15):(16*n)]),
@@ -168,8 +172,8 @@ module axi_ad9371_rx_channel #(
 
   up_adc_channel #(
     .COMMON_ID (COMMON_ID),
-    .CHANNEL_ID (CHANNEL_ID))
-  i_up_adc_channel (
+    .CHANNEL_ID (CHANNEL_ID)
+  ) i_up_adc_channel (
     .adc_clk (adc_clk),
     .adc_rst (adc_rst),
     .adc_enable (adc_enable),

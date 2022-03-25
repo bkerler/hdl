@@ -206,7 +206,10 @@ module axi_ad9265 #(
 
   // adc delay control
 
-  up_delay_cntrl #(.DATA_WIDTH(9), .BASE_ADDRESS(6'h02)) i_delay_cntrl (
+  up_delay_cntrl #(
+    .DATA_WIDTH(9),
+    .BASE_ADDRESS(6'h02)
+  ) i_delay_cntrl (
     .delay_clk (delay_clk),
     .delay_rst (delay_rst),
     .delay_locked (delay_locked_s),
