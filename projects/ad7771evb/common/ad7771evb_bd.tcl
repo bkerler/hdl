@@ -37,7 +37,7 @@ ad_ip_parameter ad7771_adc_pack CONFIG.NUM_OF_CHANNELS 8
 ad_ip_parameter ad7771_adc_pack CONFIG.SAMPLE_DATA_WIDTH 32
 
 ad_connect axi_ad7771_adc/adc_clk ad7771_adc_pack/clk
-ad_connect sys_rstgen/peripheral_reset ad7771_adc_pack/reset
+ad_connect axi_ad7771_adc/adc_reset ad7771_adc_pack/reset
 ad_connect axi_ad7771_adc/adc_valid_pp ad7771_adc_pack/fifo_wr_en
 
 ad_connect adc_data_in axi_ad7771_adc/data_in
@@ -55,12 +55,12 @@ for {set i 0} {$i < 8} {incr i} {
 
 ad_connect  sys_cpu_resetn ad7771_dma/m_dest_axi_aresetn
 ad_connect  axi_ad7771_adc/adc_clk ad7771_dma/fifo_wr_clk
-ad_connect  axi_ad7771_adc/adc_valid_pp ad7771_dma/fifo_wr_en
+
 
 ad_connect  ad7771_adc_pack/packed_fifo_wr ad7771_dma/fifo_wr
+ad_connect  ad7771_adc_pack/packed_fifo_wr_en ad7771_dma/fifo_wr_en
 ad_connect  ad7771_adc_pack/fifo_wr_overflow axi_ad7771_adc/adc_dovf
 ad_connect  adc_clk_in axi_ad7771_adc/clk_in
-ad_connect  sys_ps7/FCLK_CLK0 axi_ad7771_adc/s_axi_aclk
 
 
 # interrupts
@@ -70,13 +70,15 @@ ad_cpu_interrupt ps-13 mb-13  ad7771_dma/irq
 
 # cpu / memory interconnects
 
-ad_cpu_interconnect 0x7C400000 ad7771_dma
-ad_cpu_interconnect 0x7C420000 axi_ad7771_adc
+ad_cpu_interconnect 0x44A00000 axi_ad7771_adc 
+ad_cpu_interconnect 0x44A30000 ad7771_dma
+
  
 
 
-ad_mem_hp1_interconnect sys_cpu_clk sys_ps7/S_AXI_HP1
-ad_mem_hp1_interconnect sys_cpu_clk ad7771_dma/m_dest_axi
+ad_mem_hp1_interconnect sys_cpu_clk    sys_ps7/S_AXI_HP1
+ad_mem_hp1_interconnect sys_cpu_clk    ad7771_dma/m_dest_axi
+
 
 
 
@@ -84,7 +86,7 @@ ad_mem_hp1_interconnect sys_cpu_clk ad7771_dma/m_dest_axi
 
 set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 my_ila]
     set_property -dict [list CONFIG.C_MONITOR_TYPE {Native}] $my_ila
-    set_property -dict [list CONFIG.C_NUM_OF_PROBES {8}] $my_ila
+    set_property -dict [list CONFIG.C_NUM_OF_PROBES {9}] $my_ila
     set_property -dict [list CONFIG.C_TRIGIN_EN {false}] $my_ila
     set_property -dict [list CONFIG.C_PROBE0_WIDTH {32}] $my_ila
     set_property -dict [list CONFIG.C_PROBE1_WIDTH {32}] $my_ila
@@ -94,6 +96,9 @@ set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 my_ila]
     set_property -dict [list CONFIG.C_PROBE5_WIDTH {32}] $my_ila
     set_property -dict [list CONFIG.C_PROBE6_WIDTH {32}] $my_ila
     set_property -dict [list CONFIG.C_PROBE7_WIDTH {32}] $my_ila
+    set_property -dict [list CONFIG.C_PROBE8_WIDTH {1}] $my_ila
+
+   
    
    
     ad_connect my_ila/clk axi_ad7771_adc/adc_clk
@@ -105,4 +110,8 @@ set my_ila [create_bd_cell -type ip -vlnv xilinx.com:ip:ila:6.2 my_ila]
     ad_connect my_ila/probe5 axi_ad7771_adc/adc_data_5
     ad_connect my_ila/probe6 axi_ad7771_adc/adc_data_6
     ad_connect my_ila/probe7 axi_ad7771_adc/adc_data_7
+    ad_connect my_ila/probe8 axi_ad7771_adc/adc_valid_pp
+
+
+  
     

@@ -62,6 +62,7 @@ module axi_ad7771 #(
   output  [31:0]  adc_data_6,
   output  [31:0]  adc_data_7,
   output          adc_clk,
+  output          adc_reset,
   output          adc_valid,
   output          adc_valid_pp,
 
@@ -95,7 +96,7 @@ module axi_ad7771 #(
   wire          valid_pp_s;
 
   
-  assign adc_clk = adc_clk_s;
+assign adc_clk = adc_clk_s;
 
 axi_generic_adc #(
   .NUM_OF_CHANNELS(8),
@@ -124,6 +125,7 @@ i_axi_generic_adc (
   .s_axi_awprot(s_axi_awprot),
   .s_axi_arprot(s_axi_arprot),
   .adc_clk(adc_clk_s),
+  .adc_reset(adc_reset),
   .adc_enable({adc_enable_0,adc_enable_1,adc_enable_2,adc_enable_3,adc_enable_4,adc_enable_5,adc_enable_6,adc_enable_7}),
   .adc_dovf(adc_dovf));
 

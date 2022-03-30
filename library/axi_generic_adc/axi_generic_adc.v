@@ -42,6 +42,7 @@ module axi_generic_adc #(
 
   input adc_clk,
   output [NUM_OF_CHANNELS-1:0] adc_enable,
+  output  adc_reset,
   input adc_dovf,
 
   input    s_axi_aclk,
@@ -73,7 +74,7 @@ reg  [31:0] up_rdata = 'd0;
 reg        up_rack = 'd0;
 reg        up_wack = 'd0;
 
-wire adc_rst;
+wire adc_rst_s;
 wire up_rstn;
 wire up_clk;
 wire [13:0] up_waddr_s;
@@ -95,6 +96,7 @@ reg         up_wack_r;
 
 assign up_clk = s_axi_aclk;
 assign up_rstn = s_axi_aresetn;
+assign adc_reset = adc_rst_s;
 
 integer j;
 always @(*)
@@ -124,7 +126,7 @@ end
 up_adc_common #(.ID(ID)) i_up_adc_common (
   .mmcm_rst (),
   .adc_clk (adc_clk),
-  .adc_rst (adc_rst),
+  .adc_rst (adc_rst_s),
   .adc_r1_mode (),
   .adc_ddr_edgesel (),
   .adc_pin_mode (),
@@ -201,7 +203,7 @@ genvar i;
 for (i = 0; i < NUM_OF_CHANNELS; i=i+1) begin : inst_channel
   up_adc_channel #(.CHANNEL_ID(i)) i_up_adc_channel (
     .adc_clk (adc_clk),
-    .adc_rst (adc_rst),
+    .adc_rst (adc_rst_s),
     .adc_enable (adc_enable[i]),
     .adc_iqcor_enb (),
     .adc_dcfilt_enb (),

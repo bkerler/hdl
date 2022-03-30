@@ -57,7 +57,7 @@ module axi_ad7771_if (
   output  reg             adc_valid_6,
   output  reg             adc_valid_7,
 
-  output  reg             adc_valid_pp,
+  output                 adc_valid_pp,
 
   output  reg [ 31:0]     adc_data_0,
   output  reg [ 31:0]     adc_data_1,
@@ -123,17 +123,18 @@ module axi_ad7771_if (
   reg               adc_ready_d1 = 'd0;
   reg               adc_ready = 'd0;
   reg               adc_ready_d = 'd0;
-  
+  reg               adc_valid_pp_s = 'd0;
 
   // internal signals
 
   wire              adc_cnt_enable_s;
   wire    [  7:0]   adc_data_in_s;
   wire              adc_ready_in_s;
-  wire              adc_clk_in_s;
   wire    [ 35:0]   adc_status_clr_s;
 
-
+assign adc_clk = clk_in;
+assign adc_ready_in_s = ready_in;
+assign adc_valid_pp = adc_valid_pp_s;
   // data & status
 
  
@@ -166,25 +167,24 @@ module axi_ad7771_if (
       adc_data_7 <= adc_ch_data_7;
     end
 
-    adc_valid_0 <= adc_ch_valid_7;
-    adc_valid_1 <= adc_ch_valid_7;
-    adc_valid_2 <= adc_ch_valid_7;
-    adc_valid_3 <= adc_ch_valid_7;
-    adc_valid_4 <= adc_ch_valid_7;
-    adc_valid_5 <= adc_ch_valid_7;
-    adc_valid_6 <= adc_ch_valid_7;
+    adc_valid_0 <= adc_ch_valid_0;
+    adc_valid_1 <= adc_ch_valid_1;
+    adc_valid_2 <= adc_ch_valid_2;
+    adc_valid_3 <= adc_ch_valid_3;
+    adc_valid_4 <= adc_ch_valid_4;
+    adc_valid_5 <= adc_ch_valid_5;
+    adc_valid_6 <= adc_ch_valid_6;
     adc_valid_7 <= adc_ch_valid_7;
     
-    adc_valid_pp <= adc_valid_0 | adc_valid_1 | adc_valid_2 | adc_valid_3 |
+    adc_valid_pp_s <= adc_valid_0 | adc_valid_1 | adc_valid_2 | adc_valid_3 |
 	            adc_valid_4 | adc_valid_5 | adc_valid_6 | adc_valid_7;
    
   end
+
   // data (interleaving)
 
 
   always @(posedge adc_clk) begin
-    
-
     adc_ch_valid_d <= {adc_ch_valid_d[6:0], adc_ch_valid};
     adc_ch_data_d0[((32*0)+31):(32*0)] <= adc_ch_data[((32*0)+31):(32*0)];
     adc_ch_data_d0[((32*7)+31):(32*1)] <= adc_ch_data_d0[((32*6)+31):(32*0)];
@@ -205,6 +205,7 @@ module axi_ad7771_if (
   end
 
   always @(posedge adc_clk) begin
+
     adc_ch_valid_0 <= adc_ch_valid_d[0];
     adc_ch_valid_1 <= adc_ch_valid_d[1];
     adc_ch_valid_2 <= adc_ch_valid_d[2];
@@ -214,13 +215,13 @@ module axi_ad7771_if (
     adc_ch_valid_6 <= adc_ch_valid_d[6];
     adc_ch_valid_7 <= adc_ch_valid_d[7];
     adc_ch_data_0 <= adc_ch_data_d0[((32*0)+31):(32*0)];
-    adc_ch_data_1 <= adc_ch_data_d1[((32*1)+31):(32*1)];
-    adc_ch_data_2 <= adc_ch_data_d2[((32*2)+31):(32*2)];
-    adc_ch_data_3 <= adc_ch_data_d3[((32*3)+31):(32*3)];
-    adc_ch_data_4 <= adc_ch_data_d4[((32*4)+31):(32*4)];
-    adc_ch_data_5 <= adc_ch_data_d5[((32*5)+31):(32*5)];
-    adc_ch_data_6 <= adc_ch_data_d6[((32*6)+31):(32*6)];
-    adc_ch_data_7 <= adc_ch_data_d7[((32*7)+31):(32*7)];
+    adc_ch_data_1 <= adc_ch_data_d1[((32*0)+31):(32*0)];
+    adc_ch_data_2 <= adc_ch_data_d2[((32*0)+31):(32*0)];
+    adc_ch_data_3 <= adc_ch_data_d3[((32*0)+31):(32*0)];
+    adc_ch_data_4 <= adc_ch_data_d4[((32*0)+31):(32*0)];
+    adc_ch_data_5 <= adc_ch_data_d5[((32*0)+31):(32*0)];
+    adc_ch_data_6 <= adc_ch_data_d6[((32*0)+31):(32*0)];
+    adc_ch_data_7 <= adc_ch_data_d7[((32*0)+31):(32*0)];
   end
 
   always @(posedge adc_clk) begin
@@ -235,7 +236,7 @@ module axi_ad7771_if (
 
   // data (common)
 
-  assign adc_cnt_enable_s = (adc_cnt_p <= 9'h03e) ? 1'b1 : 1'b0;
+  assign adc_cnt_enable_s = (adc_cnt_p <= 9'h03f) ? 1'b1 : 1'b0;
 
 
   always @(posedge adc_clk) begin
@@ -244,7 +245,7 @@ module axi_ad7771_if (
     end else if (adc_cnt_enable_s == 1'b1) begin
       adc_cnt_p <= adc_cnt_p + 1'b1;
     end
-    if (adc_cnt_p[4:0] == 5'h1f | adc_cnt_p[5:0] == 6'h3e) begin
+    if (adc_cnt_p == 9'h01f || adc_cnt_p == 9'h03f) begin
       adc_valid_p <= 1'b1;
     end else begin
       adc_valid_p <= 1'b0;
