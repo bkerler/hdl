@@ -23,7 +23,6 @@ create_bd_port -dir I rx_busy
 # instantiation
 
 ad_ip_instance axi_pwm_gen ad7616_pwm_gen
-ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 0
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_PERIOD 100
 ad_ip_parameter ad7616_pwm_gen CONFIG.PULSE_0_WIDTH 5
 
@@ -58,8 +57,9 @@ if {$SI_OR_PI == 0} {
 
 } else {
   ad_ip_instance axi_ad7616 axi_ad7616
-  
+  ad_ip_parameter ad7616_pwm_gen CONFIG.ASYNC_CLK_EN 0  
   ad_connect busy_capture/signal_out axi_ad7616/rx_trigger
+  ad_connect busy_sync/out_resetn sys_cpu_resetn 
 }
 
 # dma
@@ -123,8 +123,8 @@ ad_connect sys_cpu_resetn axi_ad7616_dma/m_dest_axi_aresetn
 # interconnect
 
 ad_cpu_interconnect  0x44A30000 axi_ad7616_dma
+ad_cpu_interconnect  0x44b00000 ad7616_pwm_gen
 if {$SI_OR_PI == 0} {
-  ad_cpu_interconnect  0x44b00000 ad7616_pwm_gen
   ad_cpu_interconnect  0x44A80000 $hier_spi_engine/axi_regmap
 } else {
   ad_cpu_interconnect  0x44A00000 axi_ad7616
