@@ -1,6 +1,4 @@
 
-set adc_fifo_address_width 14
-
 source $ad_hdl_dir/projects/common/zcu102/zcu102_system_bd.tcl
 source $ad_hdl_dir/projects/common/xilinx/adcfifo_bd.tcl
 source ../common/ad9695_fmc_bd.tcl
