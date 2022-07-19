@@ -244,29 +244,19 @@ module util_axis_fifo_asym #(
 
     assign m_axis_tlast = (m_axis_valid) ? |m_axis_tlast_int_s : 1'b0;
 
-  endgenerate
-
-  // slave handshake counter
-
-  reg s_axis_tlast_d = 0;
-  always @(posedge s_axis_aclk) begin
-    s_axis_tlast_d <= s_axis_tlast;
-  end
-
-  generate
-    if (RATIO == 1) begin
-      always @(*) begin
-        s_axis_counter <= 1'b1;
-      end
-    end else if (RATIO > 1) begin
-      if (RATIO_TYPE) begin
-        always @(posedge s_axis_aclk) begin
-          if (!s_axis_aresetn) begin
-            s_axis_counter <= 0;
-          end else begin
-            if (s_axis_ready && s_axis_valid) begin
-              s_axis_counter <= s_axis_counter + 1'b1;
-            end
+generate
+  if (RATIO == 1) begin
+    initial begin
+      s_axis_counter = 1'b1;
+    end
+  end else if (RATIO > 1) begin
+    if (RATIO_TYPE) begin
+      always @(posedge s_axis_aclk) begin
+        if (!s_axis_aresetn) begin
+          s_axis_counter <= 0;
+        end else begin
+          if (s_axis_ready && s_axis_valid) begin
+            s_axis_counter <= s_axis_counter + 1'b1;
           end
         end
       end else begin
@@ -286,19 +276,18 @@ module util_axis_fifo_asym #(
 
   // master handshake sequencer
 
-  generate
-    if (RATIO == 1) begin
-      always @(*) begin
-        m_axis_counter <= 1'b0;
-      end
-    end else if (RATIO > 1) begin
-      always @(posedge m_axis_aclk) begin
-        if (!m_axis_aresetn) begin
-          m_axis_counter <= 0;
-        end else begin
-          if (m_axis_ready && m_axis_valid) begin
-            m_axis_counter <= m_axis_counter + 1'b1;
-          end
+generate
+  if (RATIO == 1) begin
+    initial begin
+      m_axis_counter = 1'b0;
+    end
+  end else if (RATIO > 1) begin
+    always @(posedge m_axis_aclk) begin
+      if (!m_axis_aresetn) begin
+        m_axis_counter <= 0;
+      end else begin
+        if (m_axis_ready && m_axis_valid) begin
+          m_axis_counter <= m_axis_counter + 1'b1;
         end
       end
     end
